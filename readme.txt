@@ -1,3 +1,19 @@
+asciiquake is a small project,
+where i dumbed down some of the stuff (such as sys and (the removal of) audio) and made it use the terminal as the output
+
+note that this does not have every key bound, personally id "bind c +attack" since its bound to ctrl at default.
+
+i have not gotten a proper test in windows because of WINE, it does compile however.
+
+additional arguments when launching asciiquake:
+  -nocolor
+  -notruecolor
+
+building:
+  cmake -B build
+  or cmake -B build -DCMAKE_TOOLCHAIN_FILE=lin_to_win.cmake
+
+--------- (john carmack's words from the 90's)
 
 This is the complete source code for winquake, glquake, quakeworld, and 
 glquakeworld.
