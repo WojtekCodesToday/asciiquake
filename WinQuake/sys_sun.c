@@ -207,7 +207,7 @@ void Sys_MakeCodeWriteable (unsigned long startaddr, unsigned long length)
 
 	addr = (startaddr & ~(psize-1)) - psize;
 
-//	fprintf(stderr, "writable code %lx(%lx)-%lx, length=%lx\n", startaddr,
+//	//fprintf(stderr, "writable code %lx(%lx)-%lx, length=%lx\n", startaddr,
 //			addr, startaddr+length, length);
 
 	r = mprotect((char*)addr, length + startaddr - addr + psize, 7);

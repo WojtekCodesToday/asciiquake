@@ -16,7 +16,7 @@
 #include <sys/wait.h>
 #include <sys/mman.h>
 #include <errno.h>
-
+#include "sx/scr.h"
 #include "quakedef.h"
 
 qboolean			isDedicated;
@@ -45,7 +45,7 @@ void Sys_Printf (char *fmt, ...)
 	va_start (argptr,fmt);
 	vsprintf (text,fmt,argptr);
 	va_end (argptr);
-	fprintf(stderr, "%s", text);
+	//fprintf(stderr, "%s", text);
 	
 	Con_Print (text);
 }
@@ -85,27 +85,83 @@ void Sys_Printf (char *fmt, ...)
 
 void Sys_Printf (char *fmt, ...)
 {
-	va_list		argptr;
-	char		text[1024];
-	unsigned char		*p;
+    va_list     argptr;
+    char        text[1024];
+    unsigned char       *p;
 
-	va_start (argptr,fmt);
-	vsprintf (text,fmt,argptr);
-	va_end (argptr);
+    va_start (argptr, fmt);
+    vsprintf (text, fmt, argptr);
+    va_end (argptr);
 
-	if (strlen(text) > sizeof(text))
-		Sys_Error("memory overwrite in Sys_Printf");
+    if (strlen(text) > 1024)
+        Sys_Error("memory overwrite in Sys_Printf");
 
     if (nostdout)
         return;
 
-	for (p = (unsigned char *)text; *p; p++) {
-		*p &= 0x7f;
-		if ((*p > 128 || *p < 32) && *p != 10 && *p != 13 && *p != 9)
-			printf("[%02x]", *p);
-		else
-			putc(*p, stdout);
-	}
+    // Static cursor trackers for rendering logs straight into screen character blocks
+    static int console_cursor_x = 0;
+    static int console_cursor_y = 0;
+    ColorRGB white_color = {255, 255, 255};
+
+    // Safe Runtime Check: If the screen structural memory layer doesn't exist yet,
+    // discard output or process silently to prevent segmentation faults during early boot.
+    if (screen != NULL && screen->px != NULL) 
+    {
+        for (p = (unsigned char *)text; *p; p++) 
+        {
+            char clean_char = *p & 0x7f;
+
+            // Handle newline breaks safely
+            if (clean_char == '\n' || clean_char == '\r') 
+            {
+                console_cursor_x = 0;
+                console_cursor_y++;
+                if (console_cursor_y >= screen->h) 
+                {
+                    console_cursor_y = screen->h - 1; // Basic clamp limit
+                }
+                continue;
+            }
+            // Handle horizontal spacing tabs
+            if (clean_char == '\t') 
+            {
+                console_cursor_x += 4;
+                if (console_cursor_x >= screen->w) {
+                    console_cursor_x = 0;
+                    console_cursor_y++;
+                }
+                continue;
+            }
+
+            // Keep text bound strictly inside pixel safety channels
+            if (clean_char >= 32 && clean_char < 127) 
+            {
+                if (console_cursor_x >= screen->w) 
+                {
+                    console_cursor_x = 0;
+                    console_cursor_y++;
+                }
+                if (console_cursor_y >= screen->h) 
+                {
+                    console_cursor_y = screen->h - 1;
+                }
+
+                // Push console text strings directly into your global screen instance buffer
+                scr_putpx(screen, console_cursor_x, console_cursor_y, clean_char, white_color);
+                console_cursor_x++;
+            }
+        }
+        
+        // Push the screen matrix buffer directly out to display the log immediately
+        scr_draw(screen);
+        fflush(stdout);
+    }
+    else
+    {
+        // Fallback: Screen is null (too early in boot phase).
+        // Standard stdout lines are skipped here to stop terminal pollution during video initialization loops.
+    }
 }
 
 #if 0
@@ -147,7 +203,7 @@ void Sys_Error (char *error, ...)
     va_start (argptr,error);
     vsprintf (string,error,argptr);
     va_end (argptr);
-	fprintf(stderr, "Error: %s\n", string);
+	//fprintf(stderr, "Error: %s\n", string);
 
 	Host_Shutdown ();
 	exit (1);
@@ -162,7 +218,7 @@ void Sys_Warn (char *warning, ...)
     va_start (argptr,warning);
     vsprintf (string,warning,argptr);
     va_end (argptr);
-	fprintf(stderr, "Warning: %s", string);
+	//fprintf(stderr, "Warning: %s", string);
 } 
 
 /*
@@ -445,7 +501,7 @@ void Sys_MakeCodeWriteable (unsigned long startaddr, unsigned long length)
 
 	addr = (startaddr & ~(psize-1)) - psize;
 
-//	fprintf(stderr, "writable code %lx(%lx)-%lx, length=%lx\n", startaddr,
+//	//fprintf(stderr, "writable code %lx(%lx)-%lx, length=%lx\n", startaddr,
 //			addr, startaddr+length, length);
 
 	r = mprotect((char*)addr, length + startaddr - addr + psize, 7);

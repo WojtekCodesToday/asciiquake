@@ -252,7 +252,7 @@ void CL_Record_f (void)
 	}
 
 	cls.forcetrack = track;
-	fprintf (cls.demofile, "%i\n", cls.forcetrack);
+	//fprintf (cls.demofile, "%i\n", cls.forcetrack);
 	
 	cls.demorecording = true;
 }

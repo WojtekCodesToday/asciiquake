@@ -19,37 +19,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "quakedef.h"
 
-void CDAudio_Play(byte track, qboolean looping)
-{
-}
+int audio_fd;
+int snd_inited;
 
+static int tryrates[] = { 11025, 22051, 44100, 8000 };
 
-void CDAudio_Stop(void)
-{
-}
-
-
-void CDAudio_Pause(void)
-{
-}
-
-
-void CDAudio_Resume(void)
-{
-}
-
-
-void CDAudio_Update(void)
-{
-}
-
-
-int CDAudio_Init(void)
+qboolean SNDDMA_Init(void)
 {
 	return 0;
 }
 
+int SNDDMA_GetDMAPos(void)
+{
+	return 0;
+}
 
-void CDAudio_Shutdown(void)
+void SNDDMA_Shutdown(void)
 {
 }
+
+/*
+==============
+SNDDMA_Submit
+
+Send sound to device if buffer isn't really the dma buffer
+===============
+*/
+void SNDDMA_Submit(void)
+{
+}
+

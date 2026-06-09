@@ -782,7 +782,7 @@ void VID_Init(unsigned char *palette)
 		vid.conheight = 200;
 
 	if (!(dpy = XOpenDisplay(NULL))) {
-		fprintf(stderr, "Error couldn't open the X display\n");
+		//fprintf(stderr, "Error couldn't open the X display\n");
 		exit(1);
 	}
 
@@ -800,7 +800,7 @@ void VID_Init(unsigned char *palette)
 
 	visinfo = glXChooseVisual(dpy, scrnum, attrib);
 	if (!visinfo) {
-		fprintf(stderr, "qkHack: Error couldn't get an RGB, Double-buffered, Depth visual\n");
+		//fprintf(stderr, "qkHack: Error couldn't get an RGB, Double-buffered, Depth visual\n");
 		exit(1);
 	}
 

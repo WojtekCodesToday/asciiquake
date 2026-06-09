@@ -549,7 +549,7 @@ void Sys_Printf (char *fmt, ...)
 	va_end (argptr);
 
 	if (cls.state == ca_dedicated)
-		fprintf(stderr, "%s", text);
+		//fprintf(stderr, "%s", text);
 }
 
 void Sys_AtExit (void)
@@ -613,7 +613,7 @@ void Sys_Error (char *error, ...)
     va_end (argptr);
 
 	Host_Shutdown();
-	fprintf(stderr, "Error: %s\n", string);
+	//fprintf(stderr, "Error: %s\n", string);
 // Sys_AtExit is called by exit to shutdown the system
 	exit(0);
 } 
@@ -792,7 +792,7 @@ void Sys_GetMemory(void)
 		quakeparms.membase = dos_getmaxlockedmem (&quakeparms.memsize);
 	}
 
-	fprintf(stderr, "malloc'd: %d\n", quakeparms.memsize);
+	//fprintf(stderr, "malloc'd: %d\n", quakeparms.memsize);
 
 	if (COM_CheckParm ("-heapsize"))
 	{

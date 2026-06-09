@@ -215,10 +215,10 @@ with the archive flag set to true.
 */
 void Cvar_WriteVariables (FILE *f)
 {
-	cvar_t	*var;
+	/*cvar_t	*var;
 	
 	for (var = cvar_vars ; var ; var = var->next)
 		if (var->archive)
-			fprintf (f, "%s \"%s\"\n", var->name, var->string);
+			//fprintf (f, "%s \"%s\"\n", var->name, var->string);*/
 }
 

@@ -522,24 +522,24 @@ void Host_Savegame_f (void)
 		return;
 	}
 	
-	fprintf (f, "%i\n", SAVEGAME_VERSION);
+	//fprintf (f, "%i\n", SAVEGAME_VERSION);
 	Host_SavegameComment (comment);
-	fprintf (f, "%s\n", comment);
+	//fprintf (f, "%s\n", comment);
 	for (i=0 ; i<NUM_SPAWN_PARMS ; i++)
-		fprintf (f, "%f\n", svs.clients->spawn_parms[i]);
-	fprintf (f, "%d\n", current_skill);
-	fprintf (f, "%s\n", sv.name);
-	fprintf (f, "%f\n",sv.time);
+		//fprintf (f, "%f\n", svs.clients->spawn_parms[i]);
+	//fprintf (f, "%d\n", current_skill);
+	//fprintf (f, "%s\n", sv.name);
+	//fprintf (f, "%f\n",sv.time);
 
 // write the light styles
 
-	for (i=0 ; i<MAX_LIGHTSTYLES ; i++)
+	/*for (i=0 ; i<MAX_LIGHTSTYLES ; i++)
 	{
 		if (sv.lightstyles[i])
-			fprintf (f, "%s\n", sv.lightstyles[i]);
+			//fprintf (f, "%s\n", sv.lightstyles[i]);
 		else
-			fprintf (f,"m\n");
-	}
+			//fprintf (f,"m\n");
+	}*/
 
 
 	ED_WriteGlobals (f);
@@ -725,23 +725,23 @@ void SaveGamestate()
 		return;
 	}
 	
-	fprintf (f, "%i\n", SAVEGAME_VERSION);
+	//fprintf (f, "%i\n", SAVEGAME_VERSION);
 	Host_SavegameComment (comment);
-	fprintf (f, "%s\n", comment);
+	//fprintf (f, "%s\n", comment);
 //	for (i=0 ; i<NUM_SPAWN_PARMS ; i++)
-//		fprintf (f, "%f\n", svs.clients->spawn_parms[i]);
-	fprintf (f, "%f\n", skill.value);
-	fprintf (f, "%s\n", sv.name);
-	fprintf (f, "%f\n", sv.time);
+//		//fprintf (f, "%f\n", svs.clients->spawn_parms[i]);
+	//fprintf (f, "%f\n", skill.value);
+	//fprintf (f, "%s\n", sv.name);
+	//fprintf (f, "%f\n", sv.time);
 
 // write the light styles
 
 	for (i=0 ; i<MAX_LIGHTSTYLES ; i++)
 	{
 		if (sv.lightstyles[i])
-			fprintf (f, "%s\n", sv.lightstyles[i]);
+			//fprintf (f, "%s\n", sv.lightstyles[i]);
 		else
-			fprintf (f,"m\n");
+			//fprintf (f,"m\n");
 	}
 
 
@@ -750,7 +750,7 @@ void SaveGamestate()
 		ent = EDICT_NUM(i);
 		if ((int)ent->v.flags & FL_ARCHIVE_OVERRIDE)
 			continue;
-		fprintf (f, "%i\n",i);
+		//fprintf (f, "%i\n",i);
 		ED_Write (f, ent);
 		fflush (f);
 	}
