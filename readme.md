@@ -1,24 +1,87 @@
 <h1 align=center>asciiquake</h1>
 <p align=center>
    <img src=scr0.png width=300> <img src=scr1.png width=300>
+   <br>
    <img src=scr2.png width=300> <img src=scr3.png width=300>
 </p>
 
 asciiquake is a small project where i dumbed down some of the stuff (such as sys and (the removal of) audio) and made it use the terminal as the output
 
-note that this does not have every key bound, personally id "bind c +attack" since its bound to ctrl at default.
+note that this does not have every important key bound (on Linux so far)
 
-i have not gotten a proper test in windows because of WINE, it does compile however.
+## additional arguments when launching asciiquake:
+- ### colors
+   - no colors:
 
-additional arguments when launching asciiquake:
--  `-nocolor`
--  `-notruecolor`
+        `-nocolor`, `-none`, `-monochrome`
+        
+       `-clr=none`, `-color=none`, `-mode=none`,
+       
+       `-clr=0`, `-color=0`, `-mode=0`,
+       
+       `-clr=mono`, `-color=mono`, `-mode=mono`
 
-building:
--  `cmake -B build`
--  or `cmake -B build -DCMAKE_TOOLCHAIN_FILE=lin_to_win.cmake`
--  `make -j4`
-(john carmack's words from the 90's)
+   - 8 colors:
+
+       `-8color`, `-ansi`, `-lowcolor`,
+
+       `-clr=8`, `-color=8`, `-mode=8`,
+
+       `-clr=ansi`, `-color=ansi`, `-mode=ansi`
+
+   - 256 colors:
+
+       `-notruecolor`, `-256color`, `-highcolor`,
+
+       `-clr=256`, `-color=256`, `-mode=256`,
+
+       `-clr=ext`, `-color=ext`, `-mode=ext`
+
+   - truecolor:
+
+       `-truecolor`, `-rgb`,
+
+       `-clr=true`, `-color=true`, `-mode=true`,
+
+       `-clr=rgb`, `-color=rgb`, `-mode=rgb`,
+
+       `-clr=24`, `-color=24`, `-mode=24`
+
+   - sixel:
+
+       `-sixel`
+
+       `-clr=sixel`, `-color=sixel`, `-mode=sixel`
+- ### screen size
+   - original size:
+   
+       `-scroriginalsize`, `-originalsize`
+   
+   - inbetween original and small size:
+      <!-- isnt this misleading or something?? -->
+       `-scrlarge`, `-highres`
+
+## building:
+```bash
+cd WinQuake
+
+cmake -B build
+# or            cmake -B build -DCMAKE_TOOLCHAIN_FILE=lin_to_win.cmake`
+
+make -j4
+# or            cmake --build -j 4
+# or            ninja -j4
+# depending what build tool given by cmake (gnu make on linux, ninja on windows),
+# you can likely look up how to build it with that tool or use the cmake one.
+```
+
+# Why?
+
+i got bored, what else to ask.
+
+# (john carmack's words from the 90's)
+
+
 ```
 This is the complete source code for winquake, glquake, quakeworld, and 
 glquakeworld.
