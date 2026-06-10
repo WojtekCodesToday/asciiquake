@@ -1,5 +1,10 @@
-asciiquake is a small project,
-where i dumbed down some of the stuff (such as sys and (the removal of) audio) and made it use the terminal as the output
+<h1 align=center>asciiquake</h1>
+<p align=center>
+   <img src=scr0.png width=300> <img src=scr1.png width=300>
+   <img src=scr2.png width=300> <img src=scr3.png width=300>
+</p>
+
+asciiquake is a small project where i dumbed down some of the stuff (such as sys and (the removal of) audio) and made it use the terminal as the output
 
 note that this does not have every key bound, personally id "bind c +attack" since its bound to ctrl at default.
 
