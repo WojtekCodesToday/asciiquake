@@ -12,9 +12,9 @@ additional arguments when launching asciiquake:
 building:
   cmake -B build
   or cmake -B build -DCMAKE_TOOLCHAIN_FILE=lin_to_win.cmake
-
---------- (john carmack's words from the 90's)
-
+  make -j4
+(john carmack's words from the 90's)
+```
 This is the complete source code for winquake, glquake, quakeworld, and 
 glquakeworld.
 
@@ -74,3 +74,4 @@ John Carmack
 Id Software
 
 
+```
