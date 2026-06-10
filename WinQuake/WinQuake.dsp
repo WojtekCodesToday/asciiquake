@@ -2221,7 +2221,7 @@ SOURCE=.\zone.h
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe"
 # Begin Source File
 
-SOURCE=.\qe3.ico
+SOURCE=.\quake.ico
 # End Source File
 # Begin Source File
 

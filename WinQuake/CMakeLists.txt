@@ -34,9 +34,10 @@ set(QUAKE_CORE_SOURCES
     r_sprite.c    r_surf.c      r_part.c      r_vars.c      screen.c
     sbar.c        sv_main.c     sv_phys.c     sv_move.c     sv_user.c
     zone.c        view.c        wad.c         world.c       cd_null.c
-    sys_null2.c   vid_x.c       sx/scr.c      snd_dma.c     snd_mem.c
+    sys_null2.c   vid_x_mthread.c       sx/scr.c      snd_dma.c     snd_mem.c
     snd_mix.c snd_null2.c
     ${FPU_STUB_FILE}
+    quake.rc
 )
 
 set(EXEC_NAME "asciiquake")

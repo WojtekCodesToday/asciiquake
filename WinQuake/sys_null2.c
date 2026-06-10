@@ -44,20 +44,19 @@ void Sys_Printf(char *fmt, ...)
     unsigned char *p;
 
     va_start(argptr, fmt);
-    vsprintf(text, fmt, argptr);
+    // Optimization 1: Use vsnprintf to safely prevent stack smashing/buffer overflows
+    vsnprintf(text, sizeof(text), fmt, argptr);
     va_end(argptr);
-
-    if (strlen(text) > 1024)
-        Sys_Error("memory overwrite in Sys_Printf");
 
     if (nostdout)
         return;
 
     static int console_cursor_x = 0;
     static int console_cursor_y = 0;
-    ColorRGB white_color = {255, 255, 255};
+    ColorRGB white_color = {0, 255, 0};
 
-    if (screen != NULL && screen->px != NULL) 
+    // Optimization 2: Ensure ALL render structures are completely instantiated before writing
+    if (screen != NULL && screen->px != NULL && screen->color != NULL) 
     {
         for (p = (unsigned char *)text; *p; p++) 
         {
@@ -99,8 +98,13 @@ void Sys_Printf(char *fmt, ...)
                 console_cursor_x++;
             }
         }
-        scr_draw(screen);
-        fflush(stdout);
+
+        // Optimization 3: Only trigger an immediate screen update if the system is fully running
+        // This avoids crashing during D_InitCaches/Host_Init boot logs.
+        if (render_buf != NULL)
+        {
+            scr_draw(screen);
+        }
     }
 }
 
