@@ -1,15 +1,59 @@
 
 #if defined(_WIN32) || defined(__MINGW32__)
-    // MSVCRT forward declarations (No windows.h needed)
-    int _kbhit(void);
-    int _getch(void);
-    __attribute__((stdcall)) void Sleep(unsigned long dwMilliseconds);
+#include <windows.h>
 
-    #define SLEEP_MS(ms) Sleep(ms)
-    
-    // Windows handles console input differently; no init/restore needed
-    inline void kb_init(void) {}
-    inline void kb_restore(void) {}
+static HANDLE hStdin;
+static DWORD prev_mode;
+
+void kb_init(void) {
+    hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    GetConsoleMode(hStdin, &prev_mode);
+    // Set to window input mode: disable line/echo, enable raw processing
+    SetConsoleMode(hStdin, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
+}
+
+void kb_restore(void) {
+    SetConsoleMode(hStdin, prev_mode);
+}
+
+// Windows-specific non-blocking input reader
+int Windows_ReadInput(unsigned char *buf, int max) {
+    DWORD count;
+    INPUT_RECORD ir[32];
+    int read_idx = 0;
+
+    GetNumberOfConsoleInputEvents(hStdin, &count);
+    if (count == 0) return 0;
+
+    PeekConsoleInput(hStdin, ir, 32, &count);
+    for (DWORD i = 0; i < count && read_idx < max; i++) {
+        if (ir[i].EventType == KEY_EVENT && ir[i].Event.KeyEvent.bKeyDown) {
+            WORD vk = ir[i].Event.KeyEvent.wVirtualKeyCode;
+            
+            // 1. Map Arrow keys with the high bit flag
+            if (vk == VK_UP)         buf[read_idx++] = 0x80 | 'A';
+            else if (vk == VK_DOWN)  buf[read_idx++] = 0x80 | 'B';
+            else if (vk == VK_LEFT)  buf[read_idx++] = 0x80 | 'D';
+            else if (vk == VK_RIGHT) buf[read_idx++] = 0x80 | 'C';
+            
+            else if (vk == VK_RETURN)  buf[read_idx++] = 13;   // Enter
+            else if (vk == VK_BACK)    buf[read_idx++] = 127;  // Backspace
+            else if (vk == VK_ESCAPE)  buf[read_idx++] = 27;   // Escape
+            else if (vk == VK_TAB)     buf[read_idx++] = 9;    // Tab
+            else if (vk == VK_CONTROL) buf[read_idx++] = K_CTRL;
+            
+            // 3. Fallback for normal character text typing
+            else {
+                char ascii = ir[i].Event.KeyEvent.uChar.AsciiChar;
+                if (ascii != 0) {
+                    buf[read_idx++] = ascii;
+                }
+            }
+        }
+    }
+    FlushConsoleInputBuffer(hStdin);
+    return read_idx;
+}
 #else
     #include <stdio.h>
     #include <stdlib.h>
