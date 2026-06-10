@@ -6,13 +6,13 @@ note that this does not have every key bound, personally id "bind c +attack" sin
 i have not gotten a proper test in windows because of WINE, it does compile however.
 
 additional arguments when launching asciiquake:
-  -nocolor
-  -notruecolor
+-  `-nocolor`
+-  `-notruecolor`
 
 building:
-  cmake -B build
-  or cmake -B build -DCMAKE_TOOLCHAIN_FILE=lin_to_win.cmake
-  make -j4
+-  `cmake -B build`
+-  or `cmake -B build -DCMAKE_TOOLCHAIN_FILE=lin_to_win.cmake`
+-  `make -j4`
 (john carmack's words from the 90's)
 ```
 This is the complete source code for winquake, glquake, quakeworld, and 
